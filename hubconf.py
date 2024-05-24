@@ -54,7 +54,7 @@ def create(name, pretrained, channels, classes, autoshape):
         raise Exception(s) from e
 
 
-def custom(path_or_model='path/to/model.pt', autoshape=True):
+def custom(path_or_model='path/to/model.pt', autoshape=True, conf_thresh=0.25, nms_thresh=0.45):
     """custom mode
 
     Arguments (3 options):
@@ -75,6 +75,9 @@ def custom(path_or_model='path/to/model.pt', autoshape=True):
     if autoshape:
         hub_model = hub_model.autoshape()  # for file/URI/PIL/cv2/np inputs and NMS
     device = select_device('0' if torch.cuda.is_available() else 'cpu')  # default to GPU if available
+    # 240524(라이언 수정: 공식 repo 코드에서 conf를 설정할 수 있도록 수정)
+    hub_model.conf = conf_thresh
+    hub_model.iou = nms_thresh
     return hub_model.to(device)
 
 
