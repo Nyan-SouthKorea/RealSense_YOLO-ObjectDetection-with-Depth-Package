@@ -6,15 +6,17 @@ import math
 class custom_yolov7_run:
     '''
     240524
-    YOLOv7 공식 레포지토리 참고하여 numpy 이미지를 입력하면 dic으로 이루어진 list형태로 인퍼런스 결과가 도출되도록 만든 모듈
+    A module has been created based on the official YOLOv7 repository to produce inference 
+    results in the form of a list of dictionaries when a numpy image is input
     '''
     def __init__(self, model_path, center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45):
         '''
-        model_path: YOLOv7 wieght파일 경로
-        center_point: [x, y]사물의 거리를 측정하기 위한 이미지의 center point(미입력 시 가장 아래 가운데로 설정됨)
-        roi_box: [x1, y1, x2, y2]사물인식 관심 영역 설정(미입력 시 전체 영역을 모두 봄)
-        conf_thresh: 사물인식 confidence threshold 설정
-        nms_thresh: 사물인식 non maximum suppression threshold 설정
+        model_path: Path to the YOLOv7 weight file
+        center_point: [x, y] The center point of the image for measuring the distance of an object (defaults to the bottom center if not provided)
+        roi_box: [x1, y1, x2, y2] Set the region of interest for object recognition (views the entire area if not provided)
+        conf_thresh: Set the confidence threshold for object recognition
+        nms_thresh: Set the non-maximum suppression threshold for object recognition
+
         '''
         self.model = custom(path_or_model = model_path, conf_thresh=conf_thresh, nms_thresh=nms_thresh)
         self.center_point = center_point
@@ -22,8 +24,8 @@ class custom_yolov7_run:
 
     def detect(self, bgr_img):
         '''
-        이미지를 입력하면 dic으로 이루어진 list를 반환
-        img: cv2로 로드한 bgr 이미지를 입력(함수 안에서 rgb로 변환함)
+        return dic_list from image after inference
+        img: bgr image from cv2 library
         '''
         # 이미지 bgr -> rgb
         self.bgr_img = bgr_img # 나중에 그릴 때 사용
@@ -63,7 +65,7 @@ class custom_yolov7_run:
     
     def draw(self):
         '''
-        self.img에 self.dic_list로 그림그려진 이미지를 반환
+        draw result to self.img by self.dic_list
         '''
         for dic in self.dic_list:
             cv2.rectangle(self.bgr_img, (dic['bbox'][0], dic['bbox'][1]), (dic['bbox'][2], dic['bbox'][3]), (0,0,255), 2)
@@ -73,8 +75,8 @@ class custom_yolov7_run:
     
     def calculate_iou(self, bbox1, bbox2):
         """
-        두 개의 bounding box의 IoU를 계산하는 함수
-        bbox1, bbox2: 두 개의 bounding box 리스트 [x1, y1, x2, y2]
+        calculate iou from 2 bounding box
+        bbox1, bbox2 form: [x1, y1, x2, y2]
         """
         # bbox 좌표 파싱
         x1_min, y1_min, x1_max, y1_max = bbox1
@@ -100,13 +102,13 @@ class custom_yolov7_run:
 
     def calculate_distance(self, point1, point2):
         """
-        두 점 사이의 직선 거리를 계산하는 함수
-        point1, point2: 두 점의 좌표 리스트 [x, y]
+        A function to calculate the straight-line distance between two points
+        point1, point2: Coordinate lists of the two points [x, y]
         """
         x1, y1 = point1
         x2, y2 = point2
         distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-        return int(distance)
+        return int(distance) 
 
 if __name__ == '__main__':
     from real_sense_camera import real_sense
