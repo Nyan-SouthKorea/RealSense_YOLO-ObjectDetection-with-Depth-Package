@@ -9,17 +9,18 @@ class custom_yolov7_run:
     A module has been created based on the official YOLOv7 repository to produce inference 
     results in the form of a list of dictionaries when a numpy image is input
     '''
-    def __init__(self, model_path, center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45):
+    def __init__(self, model_path, center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45, filter = None):
         '''
         model_path: Path to the YOLOv7 weight file
         center_point: [x, y] The center point of the image for measuring the distance of an object (defaults to the bottom center if not provided)
         roi_box: [x1, y1, x2, y2] Set the region of interest for object recognition (views the entire area if not provided)
         conf_thresh: Set the confidence threshold for object recognition
         nms_thresh: Set the non-maximum suppression threshold for object recognition
-
+        filter: if filter is not None, return classes only in filter. name of the object detection class names should be put like 'person', 'bottle', etc..
         '''
         self.model = custom(path_or_model = model_path, conf_thresh=conf_thresh, nms_thresh=nms_thresh)
         self.center_point = center_point
+        self.filter = filter
         self.roi_box = roi_box
 
     def detect(self, bgr_img):
@@ -27,29 +28,34 @@ class custom_yolov7_run:
         return dic_list from image after inference
         img: bgr image from cv2 library
         '''
-        # 이미지 bgr -> rgb
-        self.bgr_img = bgr_img # 나중에 그릴 때 사용
+        # image bgr -> rgb
+        self.bgr_img = bgr_img # use this val when drawing
         self.img = cv2.cvtColor(self.bgr_img, cv2.COLOR_BGR2RGB)
-        # 인퍼런스
+        # inference
         start = time.time()
         results = self.model(self.img).pandas().xyxy[0]
         spent_time = round(time.time() - start, 3)
-        # 후처리
+        # post processing
         dic_list = []
         for idx, row in results.iterrows():
             bbox = [int(row['xmin']), int(row['ymin']), int(row['xmax']), int(row['ymax'])]
             conf = round(row['confidence'], 3)
             class_no = row['class']
             name = row['name']
+            # apply filter
+            if self.filter != None:
+                if not name in self.filter:
+                    continue
             dic_list.append({'bbox':bbox, 'conf':conf, 'class_no':class_no, 'name':name, 'inf_time':spent_time})
-        # bbox가 roi_box에 걸쳐 있지 않을 경우 모두 삭제
+
+        # delete results which are not in roi box
         if self.roi_box != None:
             new_dic_list = []
             for dic in dic_list:
                 if self.calculate_iou(dic['bbox'], self.roi_box) > 0:
                     new_dic_list.append(dic)
             dic_list = new_dic_list
-        # center_point으로부터 각 사물의 직선 거리 계산
+        # calculate straight distance from center_point to each objects
         if self.center_point == None:
             h, w, c = bgr_img.shape
             self.center_point = [int(w/2), h]
@@ -59,7 +65,7 @@ class custom_yolov7_run:
             dic_center_y = int((y1+y2)/2)
             dic_center = [dic_center_x, dic_center_y]
             dic_list[i]['distance_from_center'] = self.calculate_distance(self.center_point, dic_center)
-        # distance_from_center가 짧은 순으로 sort
+        # sort the results list by 'distance_from_center'
         self.dic_list = sorted(dic_list, key=lambda x: x['distance_from_center'])
         return self.dic_list
     
@@ -78,25 +84,18 @@ class custom_yolov7_run:
         calculate iou from 2 bounding box
         bbox1, bbox2 form: [x1, y1, x2, y2]
         """
-        # bbox 좌표 파싱
         x1_min, y1_min, x1_max, y1_max = bbox1
         x2_min, y2_min, x2_max, y2_max = bbox2
-        # 교차 영역의 좌표 계산
         inter_x_min = max(x1_min, x2_min)
         inter_y_min = max(y1_min, y2_min)
         inter_x_max = min(x1_max, x2_max)
         inter_y_max = min(y1_max, y2_max)
-        # 교차 영역의 너비와 높이 계산
         inter_width = max(0, inter_x_max - inter_x_min)
         inter_height = max(0, inter_y_max - inter_y_min)
-        # 교차 영역의 면적 계산
         inter_area = inter_width * inter_height
-        # 각 bbox의 면적 계산
         bbox1_area = (x1_max - x1_min) * (y1_max - y1_min)
         bbox2_area = (x2_max - x2_min) * (y2_max - y2_min)
-        # 두 bbox의 합집합 면적 계산
         union_area = bbox1_area + bbox2_area - inter_area
-        # IoU 계산
         iou = inter_area / union_area if union_area != 0 else 0
         return iou
 
@@ -112,11 +111,11 @@ class custom_yolov7_run:
 
 if __name__ == '__main__':
     from real_sense_camera import real_sense
-    # Real Sense로 영상 받아서 YOLOv7 인퍼런스 테스트
+    # get stream video from Real Sense camera and inference YOLOv7 test
     RealSense = real_sense()
     model = custom_yolov7_run(model_path = 'weights/240501_best.pt')
     while True:
-        RealSense.get_cam() # 카메라 수신
+        RealSense.get_cam() # get video from camera
         color_img = RealSense.get_color_img()
         # depth_img = RealSense.get_depth_img()
         # depth_color_map = RealSense.get_depth_color_map()

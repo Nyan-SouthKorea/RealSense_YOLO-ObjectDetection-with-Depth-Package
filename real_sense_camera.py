@@ -79,18 +79,18 @@ class real_sense:
         this 3 images should be made before this fuction is called
         if you call it without preparing this 3 images, the previous frame can be concated
         '''
-        # 깊이 이미지의 최대값을 확인하고, 8비트 형식으로 스케일 조정
+        # checkt maximum value of depth image and scale to 8it
         scaled_depth_image = cv2.convertScaleAbs(self.depth_image, alpha=(255.0/np.max(self.depth_image)))
-        depth_3d = cv2.cvtColor(scaled_depth_image, cv2.COLOR_GRAY2BGR) # 1차원인 depth 이미지를 3차원으로 변경함
+        depth_3d = cv2.cvtColor(scaled_depth_image, cv2.COLOR_GRAY2BGR) # change 1d depth image to 3d
         concatenated_image = cv2.hconcat([self.color_image, depth_3d, self.depth_colormap])
         return concatenated_image
 
 
 if __name__ == "__main__":
-    # 리얼센스 카메라 스트리밍 테스트
+    # Real Sense camera streaming
     RealSense = real_sense()
     while True:
-        RealSense.get_cam() # 카메라 수신
+        RealSense.get_cam() # get video from camera
         color_img = RealSense.get_color_img()
         depth_img = RealSense.get_depth_img()
         depth_color_map = RealSense.get_depth_color_map()
