@@ -77,6 +77,8 @@ class custom_yolov7_run:
             cv2.rectangle(self.bgr_img, (dic['bbox'][0], dic['bbox'][1]), (dic['bbox'][2], dic['bbox'][3]), (0,0,255), 2)
             text = f'{dic["name"]}:{dic["conf"]}, dist:{dic["distance_from_center"]}'
             cv2.putText(self.bgr_img, text, (dic['bbox'][0], dic['bbox'][1]+25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,0,255), 2)
+        fps = int(1/dic['inf_time'])
+        cv2.putText(self.bgr_img, f'fps: {fps}', (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
         return self.bgr_img
     
     def calculate_iou(self, bbox1, bbox2):

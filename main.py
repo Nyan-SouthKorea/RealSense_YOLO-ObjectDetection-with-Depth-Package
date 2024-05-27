@@ -8,7 +8,6 @@ model = custom_yolov7_run(model_path='weights/yolov7.pt', center_point=None, roi
 while True:
     RealSense.get_cam() # 카메라 수신
     color_img = RealSense.get_color_img()
-    print(color_img.shape)
     result = model.detect(bgr_img = color_img)
     print(result)
     cv2.imshow('YOLOv7 test', model.draw())
