@@ -2,6 +2,9 @@ from hubconf import custom
 import time
 import cv2
 import math
+import torch
+import torchvision
+import time
 
 class custom_yolov7_run:
     '''
@@ -128,3 +131,34 @@ if __name__ == '__main__':
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
+def Cuda_Check():
+    try:
+        print('Pytorch 설치 여부 검사를 시작합니다.')
+        print(f'Cuda 사용 가능 여부: {torch.cuda.is_available()}')
+        print(f'Pytorch 버전: {torch.__version__}')
+        print()
+    except:
+        print('무언가 에러 발생')
+    else:
+        print('검사 완료')
+    print('')
+    try:
+        print('torchvision 설치 여부 검사를 시작합니다.')
+        print(f'torchvision 버전: {torchvision.__version__}')
+    except:
+        print('무언가 에러 발생')
+    else:
+        print('검사 완료')
+    print('')
+    try:
+        print('numpy 설치 검사를 시작합니다.')
+        import numpy
+        print('numpy 이상 무')
+    except:
+        print('무언가 에러 발생')
+    else:
+        print('검사 완료')
+    time.sleep(3)
+
+    

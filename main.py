@@ -1,7 +1,8 @@
-from custom_yolov7_inference import custom_yolov7_run
+from custom_yolov7_inference import custom_yolov7_run, Cuda_Check
 from real_sense_camera import real_sense
 import cv2
 
+Cuda_Check()
 RealSense = real_sense()
 filter = None
 model = custom_yolov7_run(model_path='weights/yolov7-tiny.pt', center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45, filter = filter)
