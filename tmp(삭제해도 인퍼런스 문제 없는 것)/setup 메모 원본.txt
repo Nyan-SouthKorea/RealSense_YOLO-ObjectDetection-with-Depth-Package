@@ -1,0 +1,103 @@
+
+
+
+
+Jetson Orin Nano Developer Kit 8Gb with JetPack 6.0 setting for pytorch, torchvision, realsense camera and help to run this demo code
+
+[Install pip3 package]
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo apt install python3-pip
+
+[pytorch install]
+follow the official guide below:
+https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html
+
+here you can simply follow:
+$ sudo apt-get -y update; 
+$ sudo apt-get -y install python3-pip libopenblas-dev;
+$ export TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
+$ python3 -m pip install --upgrade pip; python3 -m pip install numpy==’1.26.1’ python3 -m pip install --no-cache $TORCH_INSTALL
+
+now get into link below and download it:
+https://developer.download.nvidia.com/compute/redist/jp/v60dp/pytorch/torch-2.3.0a0+ebedce2.nv24.02-cp310-cp310-linux_aarch64.whl
+
+open terminal in "Downloads" folder and:
+$ pip3 install torch-2.3.0a0+ebedce2.nv24.02-cp310-cp310-linux_aarch64.whl
+
+then, now pytorch is installed. let's check that pytorch can be run with cuda:
+$ python3
+$ import torch
+$ torch.cuda.is_available()
+
+if "True" prints, good!
+type $ "exit()" to get out of python running.
+
+[torchvision install]
+I followed the link below for JetPack 6 with PyTorch v2.3.0 with CUDA 12.2: https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
+
+install below:
+$ sudo apt-get install libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev
+$ git clone --branch v0.18.0 https://github.com/pytorch/vision torchvision
+$ cd torchvision
+$ export BUILD_VERSION=0.18.0
+$ python3 setup.py install
+
+It takes about 30 minutes to be installed. After installation, test it like below:
+$ python3
+$ import torch;torch.cuda.is_available()
+if "True" is printed, it is ok with Pytorch. Now torchvision check.
+$ import torchvision
+$ torchvision.__version__
+if some version is printed, it is OK. But we would get some error about numpy when torchvision is imported. So follow the below to solve it.
+
+[numpy re-install]
+$ sudo apt-get remove python3-numpy
+$ pip install numpy
+
+[YOLOv7 pakage install]
+$ pip3 install -r requirments.txt
+
+If you get error about RealSense, You have to follow the commands below to solve it. Commands belows are various ways and installations by searched in google by my own. So there can be useless steps so please refer to it.
+
+[Realsense package install]
+first, remove the pyrealsense2 package that you installed by requirements.txt:
+$ pip3 uninstall pyrealsense2
+
+And install Necessary packages:
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install -y git libssl-dev libusb-1.0-0-dev pkg-config libgtk-3-dev
+$ sudo apt-get install -y libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
+
+SDK install:
+$ git clone https://github.com/IntelRealSense/librealsense.git
+$ cd librealsense
+$ ./scripts/setup_udev_rules.sh
+$ ./scripts/patch-realsense-ubuntu-L4T.sh
+(will get a error with jetpack version. do not mind and go on)
+
+$ mkdir build
+$ cd build
+$ cmake ../ -DFORCE_LIBUVC=ON -DCMAKE_BUILD_TYPE=Release
+$ make -j4
+$ sudo make install
+
+usb sudo issue:
+$ sudo usermod -aG video $USER
+$ sudo udevadm control --reload-rules && sudo udevadm trigger
+
+realsense libusv_installation:
+go to link: https://github.com/IntelRealSense/librealsense/blob/master/scripts/libuvc_installation.sh and download the sh file then,
+$ cd Downloads
+$ sudo chmod +x libuvc_installation.sh
+$ ./libuvc_installation.sh
+$ cd /Downloads
+$ git clone https://github.com/jetsonhacks/installRealSenseSDK.git
+$ cd installRealSenseSDK
+$ ./installLibrealsense.sh
+
+Finish! now let's run $ python3 main.py and check YOLOv7 on RealSense Camera with Jetson Orin Nano Developer Kit deploy~!
+
+
+
