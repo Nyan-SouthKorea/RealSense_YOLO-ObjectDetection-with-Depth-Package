@@ -11,10 +11,9 @@ This project involves running the YOLOv7 object detection model at over 20fps us
 1. **Hardware**: 
    - Moving platform, RealSense camera with 2D RGB sensor, Jetson Orin Nano Developer Kit 8GB.
    - RealSense Camera Model: D435(I don't know reason but failed to do with D455. It works in JetPack 4.2 or in Windows11 very well but have some problem with JetPack 6.0)(issue link: https://github.com/IntelRealSense/librealsense/issues/12894)
-   - When the air purifier is installed: Change to NU4100 (2LL + 2D RGB sensor).
 
 2. **Image Input Size for Object Detection AI Model**: 
-   - YOLOv7 416x320 (same as the air purifier model).
+   - YOLOv7 416x320
 
 3. **Obstacle Distance Detection Implementation**: 
    - Using pixel distance.
@@ -23,15 +22,7 @@ This project involves running the YOLOv7 object detection model at over 20fps us
 
 - **Camera Specifications**: 
   - Image size should be confirmed and be 640x480 or less due to the large amount of image data. This minimizes the data load on the robot side.
-  - The best model that can run on the NU4100, confirmed through various experiments, is YOLOv7 480x288, with a total of 138,240 pixels. The optimal image size for the NU4100, considering the modified global shutter image size and similar ratio, is 416x320 with 133,120 pixels.
-
-- **Camera Setup**:
-  - Two cameras are used to check two views simultaneously. The moving platform will have an upper view RealSense camera, while the air purifier will have an upper 2D RGB camera looking downwards.
-  - The air purifier's 2D RGB camera will be installed at an angle looking down from above. Avoidance criteria will be created based on the pixel distance to detected objects. While the exact distance cannot be known, a rough avoidance method will be implemented.
-
-## Development Details
-
-We will develop an object detection package and deliver it to S/W team.
+  - The best model that can run on the small test NPU, confirmed through various experiments, is YOLOv7 480x288, with a total of 138,240 pixels. The optimal image size for the small test NPU, considering the modified global shutter image size and similar ratio, is 416x320 with 133,120 pixels.
 
 1. **Input Data**: Numpy image.
 2. **Return Data**: List containing the results of object detection.
@@ -198,7 +189,6 @@ and check YOLOv7 on RealSense Camera with Jetson Orin Nano Developer Kit deploym
 1. **하드웨어**:
    - 이동 플랫폼, 2D RGB 센서가 있는 RealSense 카메라, Jetson Orin Nano Developer Kit 8GB.
    - RealSense 카메라 모델: D435(이유는 모르겠지만 D455로는 실패했습니다. JetPack 4.2 또는 Windows11에서는 잘 작동하지만 JetPack 6.0에서는 문제가 있습니다)(이슈 링크: https://github.com/IntelRealSense/librealsense/issues/12894)
-   - 공기청정기가 설치된 경우: NU4100(2LL + 2D RGB 센서)로 변경합니다.
 
 2. **객체 탐지 AI 모델의 이미지 입력 크기**:
    - YOLOv7 416x320 (공기청정기 모델과 동일).
@@ -210,15 +200,7 @@ and check YOLOv7 on RealSense Camera with Jetson Orin Nano Developer Kit deploym
 
 - **카메라 사양**:
   - 이미지 크기는 640x480 이하로 확인해야 합니다. 이는 많은 양의 이미지 데이터를 줄여 로봇 측의 데이터 부하를 최소화합니다.
-  - 다양한 실험을 통해 NU4100에서 실행할 수 있는 최적의 모델은 총 138,240 픽셀의 YOLOv7 480x288입니다. 수정된 글로벌 셔터 이미지 크기와 비슷한 비율을 고려한 NU4100의 최적 이미지 크기는 133,120 픽셀의 416x320입니다.
-
-- **카메라 설정**:
-  - 두 개의 카메라를 사용하여 두 개의 뷰를 동시에 확인합니다. 이동 플랫폼에는 상단 뷰 RealSense 카메라가, 공기청정기에는 상단에서 아래를 향하는 2D RGB 카메라가 설치됩니다.
-  - 공기청정기의 2D RGB 카메라는 위에서 아래를 내려다보는 각도로 설치됩니다. 탐지된 물체에 대한 픽셀 거리를 기준으로 회피 기준을 생성할 것입니다. 정확한 거리는 알 수 없지만 대략적인 회피 방법이 구현될 것입니다.
-
-## 개발 세부 사항
-
-우리는 객체 탐지 패키지를 개발하여 S/W 팀에 제공할 것입니다.
+  - 다양한 실험을 통해 소형 테스트용 NPU에서 실행할 수 있는 최적의 모델은 총 138,240 픽셀의 YOLOv7 480x288입니다. 수정된 글로벌 셔터 이미지 크기와 비슷한 비율을 고려한 소형 테스트용 NPU의 최적 이미지 크기는 133,120 픽셀의 416x320입니다.
 
 1. **입력 데이터**: Numpy 이미지.
 2. **반환 데이터**: 객체 탐지 결과를 포함하는 리스트.
