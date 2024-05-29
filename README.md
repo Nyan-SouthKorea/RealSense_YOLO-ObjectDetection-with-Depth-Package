@@ -191,7 +191,7 @@ and check YOLOv7 on RealSense Camera with Jetson Orin Nano Developer Kit deploym
    - RealSense 카메라 모델: D435(이유는 모르겠지만 D455로는 실패했습니다. JetPack 4.2 또는 Windows11에서는 잘 작동하지만 JetPack 6.0에서는 문제가 있습니다)(이슈 링크: https://github.com/IntelRealSense/librealsense/issues/12894)
 
 2. **객체 탐지 AI 모델의 이미지 입력 크기**:
-   - YOLOv7 416x320 (공기청정기 모델과 동일).
+   - YOLOv7 416x320
 
 3. **장애물 거리 탐지 구현**:
    - 픽셀 거리를 사용합니다.
