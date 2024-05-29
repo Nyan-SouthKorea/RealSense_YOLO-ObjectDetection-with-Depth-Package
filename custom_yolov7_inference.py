@@ -5,6 +5,8 @@ import math
 import torch
 import torchvision
 import time
+import os
+import requests
 
 class custom_yolov7_run:
     '''
@@ -21,6 +23,7 @@ class custom_yolov7_run:
         nms_thresh: Set the non-maximum suppression threshold for object recognition
         filter: if filter is not None, return classes only in filter. name of the object detection class names should be put like 'person', 'bottle', etc..
         '''
+        self.base_weights_check()
         self.model = custom(path_or_model = model_path, conf_thresh=conf_thresh, nms_thresh=nms_thresh)
         self.center_point = center_point
         self.filter = filter
@@ -114,6 +117,24 @@ class custom_yolov7_run:
         x2, y2 = point2
         distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         return int(distance) 
+    
+    def base_weights_check(self):
+        url_dic = {'yolov7-tiny.pt':'https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7-tiny.pt', 
+                   'yolov7.pt': 'https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt'}
+        for model_name, url in url_dic.items():
+            if not os.path.exists(f'./weights/{model_name}'):
+                # file download
+                response = requests.get(url)
+                # response check
+                if response.status_code == 200:
+                    with open(f'./weights/{model_name}', 'wb') as file:
+                        file.write(response.content)
+                    print(f'{model_name} downloaded done')
+                else:
+                    print(f'{model_name} is not downloaded. visit YOLOv7 repository and download by your self')
+            else:
+                print(f'{model_name} checked')
+
 
 if __name__ == '__main__':
     from real_sense_camera import real_sense
@@ -134,31 +155,31 @@ if __name__ == '__main__':
 
 def Cuda_Check():
     try:
-        print('Pytorch 설치 여부 검사를 시작합니다.')
-        print(f'Cuda 사용 가능 여부: {torch.cuda.is_available()}')
-        print(f'Pytorch 버전: {torch.__version__}')
+        print('Starting check for PyTorch installation.')
+        print(f'CUDA available: {torch.cuda.is_available()}')
+        print(f'PyTorch version: {torch.__version__}')
         print()
     except:
-        print('무언가 에러 발생')
+        print('An error occurred.')
     else:
-        print('검사 완료')
+        print('Check complete.')
     print('')
     try:
-        print('torchvision 설치 여부 검사를 시작합니다.')
-        print(f'torchvision 버전: {torchvision.__version__}')
+        print('Starting check for torchvision installation.')
+        print(f'torchvision version: {torchvision.__version__}')
     except:
-        print('무언가 에러 발생')
+        print('An error occurred.')
     else:
-        print('검사 완료')
+        print('Check complete.')
     print('')
     try:
-        print('numpy 설치 검사를 시작합니다.')
+        print('Starting check for numpy installation.')
         import numpy
-        print('numpy 이상 무')
+        print('numpy is installed.')
     except:
-        print('무언가 에러 발생')
+        print('An error occurred.')
     else:
-        print('검사 완료')
-    time.sleep(3)
+        print('Check complete.')
+    time.sleep(2)
 
     
