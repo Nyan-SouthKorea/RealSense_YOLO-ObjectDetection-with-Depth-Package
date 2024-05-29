@@ -135,24 +135,6 @@ class custom_yolov7_run:
             else:
                 print(f'{model_name} checked')
 
-
-if __name__ == '__main__':
-    from real_sense_camera import real_sense
-    # get stream video from Real Sense camera and inference YOLOv7 test
-    RealSense = real_sense()
-    model = custom_yolov7_run(model_path = 'weights/240501_best.pt')
-    while True:
-        RealSense.get_cam() # get video from camera
-        color_img = RealSense.get_color_img()
-        # depth_img = RealSense.get_depth_img()
-        # depth_color_map = RealSense.get_depth_color_map()
-        result = model.detect(bgr_img = color_img)
-        print(result)
-        cv2.imshow('YOLOv7 test', model.draw())
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
-            break
-
 def Cuda_Check():
     try:
         print('Starting check for PyTorch installation.')
@@ -181,5 +163,22 @@ def Cuda_Check():
     else:
         print('Check complete.')
     time.sleep(2)
+
+if __name__ == '__main__':
+    from real_sense_camera import real_sense
+    # get stream video from Real Sense camera and inference YOLOv7 test
+    RealSense = real_sense()
+    model = custom_yolov7_run(model_path = 'weights/240501_best.pt')
+    while True:
+        RealSense.get_cam() # get video from camera
+        color_img = RealSense.get_color_img()
+        # depth_img = RealSense.get_depth_img()
+        # depth_color_map = RealSense.get_depth_color_map()
+        result = model.detect(bgr_img = color_img)
+        print(result)
+        cv2.imshow('YOLOv7 test', model.draw())
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
 
     
