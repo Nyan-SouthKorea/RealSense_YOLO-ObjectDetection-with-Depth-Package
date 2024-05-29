@@ -1,6 +1,6 @@
 
 # Object Detection Package for Moving Platform
-![Demo GIF](https://www.example.com/link-to-your-gif.gif)
+![Demo GIF](readme_images/gif_1.gif)
 
 
 ## Introduction
