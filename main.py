@@ -5,7 +5,8 @@ import cv2
 Cuda_Check()
 RealSense = real_sense()
 filter = None
-model = custom_yolov7_run(model_path='weights/yolov7-tiny.pt', center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45, filter = filter)
+# default_memo: conf_thresh=0.25, nms_thresh=0.45
+model = custom_yolov7_run(model_path='weights/best.pt', center_point=None, roi_box=None, conf_thresh=0.25, nms_thresh=0.45, filter = filter)
 while True:
     RealSense.get_cam() # 카메라 수신
     color_img = RealSense.get_color_img()
