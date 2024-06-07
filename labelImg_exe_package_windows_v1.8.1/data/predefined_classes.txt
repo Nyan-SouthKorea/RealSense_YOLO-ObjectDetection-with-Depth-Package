@@ -1,0 +1,11 @@
+cable
+carpet
+cloth
+liquid
+poop
+rack
+scale
+shoe
+socks
+towel
+book

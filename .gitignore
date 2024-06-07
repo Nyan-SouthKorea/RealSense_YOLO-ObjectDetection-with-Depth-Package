@@ -39,6 +39,10 @@ results*.csv
 coco/
 coco128/
 VOC/
+dataset/
+datasets/
+yolov7-main/dataset
+datasets/
 
 coco2017labels-segments.zip
 test2017.zip

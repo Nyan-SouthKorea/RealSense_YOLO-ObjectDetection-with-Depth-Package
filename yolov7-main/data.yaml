@@ -1,0 +1,7 @@
+test: D:/Code/240321_MovingPlatformObjectDetection/RealSense_YOLO_package/yolov7-main/dataset/up_view/images
+
+# number of classes
+nc: 10
+
+# class names
+names: ['cable', 'carpet', 'cloth', 'liquid', 'poop', 'rack', 'scale', 'socks', 'towel', 'book']
