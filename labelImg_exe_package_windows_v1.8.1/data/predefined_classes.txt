@@ -1,11 +1,9 @@
 cable
 carpet
-cloth
+cloths
 liquid
 poop
 rack
 scale
 shoe
-socks
-towel
 book
