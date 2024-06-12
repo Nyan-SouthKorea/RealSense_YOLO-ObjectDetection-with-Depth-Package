@@ -1,0 +1,2 @@
+240610 cloths class 병합(옷, 양말, 수건 모두 cloths라는 이름으로, book을 9 -> 7로)
+python yolov7-main/train.py --weights yolov7-main/weights/yolov7.pt --data data.yaml --epochs 10 --batch-size 64 --img-size 416 320 --device 1 --save_period 1

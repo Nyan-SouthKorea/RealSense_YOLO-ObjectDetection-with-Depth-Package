@@ -1,0 +1,9 @@
+train: /data2/iena/240321_MovingPlatformObjectDetection/git_project/1_Preprocessing/7_class_edit/train/images/
+val: /data2/iena/240321_MovingPlatformObjectDetection/git_project/1_Preprocessing/7_class_edit/val/images/
+test: /data2/iena/240321_MovingPlatformObjectDetection/git_project/1_Preprocessing/7_class_edit/test/images/
+
+# number of classes
+nc: 7
+
+# class names
+names: ['cable', 'carpet', 'cloths', 'liquid', 'poop', 'rack', 'scale']

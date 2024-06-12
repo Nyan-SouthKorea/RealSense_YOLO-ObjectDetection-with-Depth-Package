@@ -1,7 +1,9 @@
-test: D:/Code/240321_MovingPlatformObjectDetection/RealSense_YOLO_package/yolov7-main/dataset/up_view/images
+
+    
+test: D:/Code/240321_MovingPlatformObjectDetection/RealSense_YOLO_package/yolov7-main/dataset/240612_origin_data_merge/up_view/images
 
 # number of classes
-nc: 10
+nc: 7
 
 # class names
-names: ['cable', 'carpet', 'cloth', 'liquid', 'poop', 'rack', 'scale', 'socks', 'towel', 'book']
+names: ['cable', 'carpet', 'cloths', 'liquid', 'poop', 'rack', 'scale']
